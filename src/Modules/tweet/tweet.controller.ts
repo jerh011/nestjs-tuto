@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { TweetService } from './tweet.service';
 import { CreateTweetDto } from './dto/create-tweet.dto';
 // import { UpdateTweetDto } from './dto/update-tweet.dto';
@@ -12,15 +12,15 @@ export class TweetController {
     return this.tweetService.create(createTweetDto);
   }
 
-  @Get()
-  findAll() {
-    return this.tweetService.findAll();
+  @Get(':userid')
+  public GetTweets(@Param('userid',ParseIntPipe) userid:number) {
+    return this.tweetService.getTweets(userid);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tweetService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.tweetService.findOne(+id);
+  // }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateTweetDto: UpdateTweetDto) {

@@ -10,15 +10,17 @@ import {
 
 export class CreateUserDto {
 
-  @IsNumber({}, { message: 'El id debe ser un número válido.' })
-  @IsOptional()
-  id!: number;
-  
+
   @IsString({ message: 'El nombre debe ser un texto (string).' })
   @IsNotEmpty({ message: 'El nombre no debe estar vacío.' })
   @MinLength(3, { message: 'El nombre debe tener al menos 3 caracteres.' })
-  name!: string;
+  firstName!: string;
   
+  @IsString({ message: 'El apellido debe ser un texto (string).' })
+  @IsNotEmpty({ message: 'El apellido no debe estar vacío.' })
+  @MinLength(3, { message: 'El apellido debe tener al menos 3 caracteres.' })
+  lastName!: string;
+
   @IsEmail({}, { message: 'El correo electrónico no es válido.' })
   @IsNotEmpty({ message: 'El correo electrónico es obligatorio.' })
   email!: string;
@@ -31,7 +33,12 @@ export class CreateUserDto {
   @IsOptional()
   gender?: string;
   
-  @IsBoolean({ message: 'El campo isMarried debe ser verdadero o falso.' })
-  @IsNotEmpty({ message: 'El estado civil es obligatorio.' })
-  isMarried!: boolean;
+  // @IsBoolean({ message: 'El campo isMarried debe ser verdadero o falso.' })
+  // @IsNotEmpty({ message: 'El estado civil es obligatorio.' })
+  // isMarried!: boolean;
+
+  @IsString({ message: 'la contraseña debe ser un texto (string).' })
+  @IsNotEmpty({ message: 'la contraseña no debe estar vacío.' })
+  @MinLength(3, { message: 'la contraseña debe tener al menos 3 caracteres.' })
+  password!:string;
 }
