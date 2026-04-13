@@ -2,38 +2,49 @@ import { Injectable,Inject,forwardRef } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthService } from '../auth/auth.service';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(forwardRef(() => AuthService)) private readonly authService:AuthService){}
-   users: {id: number,name:string,email:string,age:number,gender?:string,isMarried: boolean,password:string}[]=[
-      {id: 1,name:'jhon',email:"jesus@si.com",age:28,gender: 'male',isMarried:true, password:'123'},
-      {id: 2 ,name:'MAKAKOtAKTICO',email:"si@si.com",age:10,gender: 'COOMPAÑERE',isMarried:true,password:'123'}
-    ]
+  // constructor(@Inject(forwardRef(() => AuthService)) private readonly authService:AuthService){}
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
-  create(createUserDto: CreateUserDto) {
+  public async create(createUserDto: CreateUserDto) {
     // this.users.push(createUserDto);
-    return "sea creado un nuevo usuario"
+    //validate if a user exist whit the give email
+    const user = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+    // create that user
+    if (user) return 'el usuario con este correo ya existe';
+    //save in table user
+    let newUsuario = this.userRepository.create(createUserDto);
+    newUsuario = await this.userRepository.save(newUsuario);
+    return newUsuario;
   }
 
-  findAll() {
-    if(this.authService.isAuthenticated)
-    return this.users;
-    return "you aren't login";
+  public async findAll() {
+    return this.userRepository.find();
   }
 
-  findOne(id: Number) {
-    return this.users.find(x=>x.id===id);
+  public async findOne(idUser: number) {
+    return this.userRepository.findOne({ where: { id: idUser } });
   }
 
-  update(id: number, 
-         user: UpdateUserDto
- ) {
-    return `This action updates a #${id} user`;
+  public async update(id: number, userUpdate: UpdateUserDto) {
+    if (!userUpdate) {
+      return `Usuario con id ${id} no encontrado`;
+    }
+    return this.userRepository.update(id,userUpdate );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  public async remove(idUser: number) {
+    return this.userRepository.delete({ id: idUser });
   }
 }
   

@@ -8,7 +8,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService,) {}
 
   @Post()
-  create(@Body(new ValidationPipe()) user :CreateUserDto) {
+  create(@Body() user :CreateUserDto) {
+  // create(@Body(new ValidationPipe()) user :CreateUserDto) {
     return this.usersService.create(user);
   }
 
@@ -23,15 +24,15 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string,
+  update(@Param('id') id: number,
    @Body() user: UpdateUserDto
   ) {
-    console.log(user);
+    // console.log(user);
     return this.usersService.update(+id,user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.usersService.remove(+id);
   }
 }

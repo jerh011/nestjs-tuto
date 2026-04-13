@@ -18,10 +18,10 @@ export class TweetService {
   }
 
   getTweets(userid: number) {
-    const user= this.userService.findOne(userid)
-    const tweet= this.tweets.filter(t=>t.userId===userid);
-    const response= tweet.map(t=>{return{text:t.text,date: t.date, name: user?.name}})
-    return response;
+    // const user= this.userService.findOne(userid)
+    // const tweet= this.tweets.filter(t=>t.userId===userid);
+    // const response= tweet.map(t=>{return{text:t.text,date: t.date, name: user?.name}})
+    return "response";
   }
 
   findOne(id: number) {
